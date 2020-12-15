@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>정기결제</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/product/">
+
+    <!-- Bootstrap core CSS -->
+	<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="product.css" rel="stylesheet">
+    
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
+	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+	
+	<script type="text/javascript">
+	    $(document).ready(function () {
+	    	
+	    	 var table = $('#example').DataTable( {
+	    		"responsive": true,
+	    		"autoWidth": false,
+	    		"searching": false,
+	    		"lengthChange": false,
+	            "ajax": {
+	                "url": window.location.origin + "/payments",
+	                "dataSrc": ""
+	            },
+	            "columns": [
+	                { "data": "m_num" },
+	                { "data": "cid" },
+	                { "data": "partner_order_id" },
+	                { "data": "partner_user_id" },
+	                { "data": "item_name" },
+	                { "data": "total_amount" },
+	                { "data": "pg_token" },
+	                { "data": "aid" },
+	                { "data": "tid" },
+	                { "data": "sid" },
+	                { "data": "created_at" },
+	                { "data": "approved_at" },
+	                { "data": "canceled_at" }
+	            ]
+	        } );
+	    	
+	    	 $('#example tbody').on('click', 'tr', function () {
+    	        var data = table.row( this ).data();
+    	        
+    	        document.getElementById("cid").setAttribute('value',data.cid);
+    	        document.getElementById("cid_secret").setAttribute('value',data.cid_secret);
+    	        document.getElementById("sid").setAttribute('value',data.sid);
+    	        document.getElementById("partner_order_id").setAttribute('value',data.partner_order_id);
+    	        document.getElementById("partner_user_id").setAttribute('value',data.partner_user_id);
+    	        document.getElementById("item_name").setAttribute('value',data.item_name);
+    	        document.getElementById("quantity").setAttribute('value',data.quantity);
+    	        document.getElementById("total_amount").setAttribute('value',data.total_amount);
+    	        document.getElementById("tax_free_amount").setAttribute('value',data.tax_free_amount);
+    	    } );
+	    });
+	</script>
+  
+  </head>
+
+  
+  <body>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+	  <h5 class="my-0 mr-md-auto font-weight-normal">카카오페이</h5>
+	  <nav class="my-2 my-md-0 mr-md-3">
+	    <a class="p-2 text-dark" href="/index.html">단건결제</a>
+	    <a class="p-2 text-dark" href="/subscription.html">정기결제</a>
+	    <a class="p-2 text-dark" href="/database.html">결제내역</a>
+	  </nav>
+	</div>
+
+	<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+	    <table id="example" class="display" style="width:100%">
+	        <thead>
+	            <tr>
+	                <th>순번</th>
+	                <th>가맹점 코드</th>
+	                <th>가맹점 주문번호</th>
+	                <th>가맹점 회원 id</th>
+	                <th>상품명</th>
+	                <th>결제금액</th>
+	                <th>결제승인 요청 토큰</th>
+	                <th>요청 고유 번호</th>
+	                <th>결제 고유 번호</th>
+	                <th>정기결제용 ID</th>
+	                <th>결제준비 요청 시각</th>
+	                <th>결제승인 시각</th>
+	                <th>결제 취소 시각</th>
+				</tr>
+	        </thead>
+    	</table>
+	</div>
+
+	<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+	  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+	    <div class="my-3 p-3">
+	      <h4 class="mb-3">정기 결제 준비</h4>
+			<form id="my-form-id" name="my-form-id">
+	        <div class="row">
+	          <div class="col-md-6 mb-3 form-group">
+	            <label>가맹점 코드, 10자</label>
+	            <input type="text" class="form-control" id="cid" name="cid">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>가맹점 코드 인증키</label>
+			    <input type="text" class="form-control" id="cid_secret" name="cid_secret">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+			    <label>정기결제 키</label>
+			    <input type="text" class="form-control" id="sid" name="sid">
+			  </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>가맹점 주문번호</label>
+		    	<input type="text" class="form-control" id="partner_order_id" name="partner_order_id">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>가맹점 회원 id</label>
+		    	<input type="text" class="form-control" id="partner_user_id" name="partner_user_id">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>상품명</label>
+		    	<input type="text" class="form-control" id="item_name" name="item_name">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>상품 수량</label>
+		    	<input type="text" class="form-control" id="quantity" name="quantity">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>상품 총액</label>
+		    	<input type="text" class="form-control" id="total_amount" name="total_amount">
+	          </div>
+	          <div class="col-md-6 mb-3 form-group">
+				<label>상품 비과세 금액</label>
+		    	<input type="text" class="form-control" id="tax_free_amount" name="tax_free_amount">
+	          </div>
+	        </div>
+	        <hr class="mb-4">
+	      </form>
+	      <button class="btn btn-primary btn-lg btn-block" id="subscription">1. 정기 결제 요청</button>
+	      
+	    </div>
+	  </div>
+	  
+	  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+	    <div class="my-3 py-3">
+	    	<h4 class="mb-3">결제준비 결과</h4>
+	     	<pre class="text-left"><code class="JSON" id="codeblock"></code></pre>
+	    </div>
+	  </div>
+	</div>
+</body>
+<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+    	var readyResponse = null;
+    	
+		$("#subscription").click(function () {
+        	var formData = new FormData(document.getElementById("my-form-id"));
+        	
+        	var xhttp = new XMLHttpRequest();
+        	xhttp.open("POST", "/subscription", true);
+        	xhttp.responseType = 'json';
+        	xhttp.onload = function (e) {
+        		readyResponse = JSON.stringify(xhttp.response, undefined, 4);
+        		document.getElementById("codeblock").innerHTML = readyResponse;
+        		document.querySelectorAll('pre code').forEach((block) => {
+	   				hljs.highlightBlock(block);
+				});
+       		};
+        	xhttp.send(formData);
+        });
+		
+    });
+</script>
+</html>
